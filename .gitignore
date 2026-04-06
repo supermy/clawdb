@@ -1,0 +1,68 @@
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+
+# Cargo
+Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Data directories
+/data/
+/vector_db/
+*.db
+*.db-journal
+*.db-wal
+*.sst
+*.log
+
+# Build artifacts
+*.o
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exe
+
+# Profiling
+*.profraw
+*.profdata
+
+# Test coverage
+*.gcno
+*.gcda
+*.lcov
+
+# Documentation
+/doc/
+
+# Benchmark results
+/target/criterion/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Logs
+*.log.*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Project specific
+PLAN.md
