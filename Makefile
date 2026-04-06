@@ -83,6 +83,10 @@ comprehensive-bench:
 	@echo "🔍 Running comprehensive benchmark..."
 	cargo run --release --bin comprehensive_benchmark
 
+real-bench:
+	@echo "🎯 Running real end-to-end benchmark..."
+	cargo run --release --bin real_benchmark
+
 profile:
 	@echo "📈 Profiling..."
 	cargo run --release --features profiling
@@ -136,6 +140,7 @@ help:
 	@echo "  benchmark      Run full SIFT1M benchmark"
 	@echo "  quick-bench    Run quick benchmark (faster)"
 	@echo "  comprehensive-bench Run comprehensive benchmark (all features)"
+	@echo "  real-bench     Run real end-to-end benchmark (data->optimization->rocksdb)"
 	@echo ""
 	@echo "🔍 Code Quality:"
 	@echo "  fmt            Format code using rustfmt"
