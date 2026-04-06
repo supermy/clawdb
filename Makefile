@@ -79,6 +79,10 @@ quick-bench:
 	@echo "⚡ Running quick benchmark..."
 	cargo run --release --bin quick_benchmark
 
+comprehensive-bench:
+	@echo "🔍 Running comprehensive benchmark..."
+	cargo run --release --bin comprehensive_benchmark
+
 profile:
 	@echo "📈 Profiling..."
 	cargo run --release --features profiling
@@ -131,6 +135,7 @@ help:
 	@echo "  generate-data  Generate synthetic test data (100K vectors)"
 	@echo "  benchmark      Run full SIFT1M benchmark"
 	@echo "  quick-bench    Run quick benchmark (faster)"
+	@echo "  comprehensive-bench Run comprehensive benchmark (all features)"
 	@echo ""
 	@echo "🔍 Code Quality:"
 	@echo "  fmt            Format code using rustfmt"

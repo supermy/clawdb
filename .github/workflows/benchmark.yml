@@ -68,6 +68,10 @@ jobs:
         run: |
           cargo run --release --bin quick_benchmark 2>&1 | tee benchmark_results.txt
 
+      - name: Run comprehensive benchmark
+        run: |
+          cargo run --release --bin comprehensive_benchmark 2>&1 | tee comprehensive_results.txt
+
       - name: Extract benchmark results
         id: extract
         run: |
@@ -77,9 +81,14 @@ jobs:
           echo "- Vector Count: ${{ github.event.inputs.vector_count || '50000' }}" >> $GITHUB_STEP_SUMMARY
           echo "- Runner: ${{ runner.os }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Results" >> $GITHUB_STEP_SUMMARY
+          echo "### Quick Benchmark" >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           cat benchmark_results.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Comprehensive Benchmark" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat comprehensive_results.txt >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
 
       - name: Upload benchmark results
@@ -88,6 +97,7 @@ jobs:
           name: benchmark-results
           path: |
             benchmark_results.txt
+            comprehensive_results.txt
             data/benchmark_report.md
           retention-days: 30
 
