@@ -1,230 +1,230 @@
-# Changelog
+# 变更日志
 
-All notable changes to this project will be documented in this file.
+本文件记录了项目的所有重要变更。
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
+本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
-## [0.4.0] - 2024-04-06
+## [0.4.0] - 2026-04-07
 
-### Added
+### 新增
 
-#### Core Features
-- **HNSW Index**: Hierarchical Navigable Small World graph index implementation
-  - High recall ANN search
-  - Heuristic neighbor selection
-  - Multi-layer graph structure
-  - Configurable parameters (ef_construction, m_max, ml)
+#### 核心功能
+- **HNSW 索引**: 分层导航小世界图索引实现
+  - 高召回率近似最近邻搜索
+  - 启发式邻居选择算法
+  - 多层图结构
+  - 可配置参数 (ef_construction, m_max, ml)
 
-- **Parallel K-Means**: Optimized IVF index building
-  - Parallel distance computation using Rayon
-  - K-Means++ initialization algorithm
-  - Early stopping mechanism
-  - 2-4x faster index build
+- **并行 K-Means**: 优化的 IVF 索引构建
+  - 使用 Rayon 进行并行距离计算
+  - K-Means++ 初始化算法
+  - 早期停止机制
+  - 索引构建速度提升 2-4 倍
 
-- **Vector Cache**: LRU cache implementation
-  - Single-level cache with TTL support
-  - Multi-level cache (L1/L2)
-  - Thread-safe design with Arc<Mutex>
-  - Cache statistics and hit rate tracking
+- **向量缓存**: LRU 缓存实现
+  - 支持 TTL 的单层缓存
+  - 多级缓存 (L1/L2)
+  - 使用 Arc<Mutex> 的线程安全设计
+  - 缓存统计和命中率跟踪
 
-- **DiskANN TableFactory**: Product Quantization storage
-  - Custom SST file format
-  - Meta Block for codebook storage
-  - Data Block for PQ codes
-  - 6-10x memory reduction
+- **DiskANN TableFactory**: 乘积量化存储
+  - 自定义 SST 文件格式
+  - Meta Block 存储码本
+  - Data Block 存储 PQ 编码
+  - 内存占用降低 6-10 倍
 
-- **Async I/O**: Asynchronous file operations
-  - AsyncEnv trait abstraction
-  - TokioEnv implementation (cross-platform)
-  - IoUringEnv implementation (Linux, with Tokio fallback)
+- **异步 I/O**: 异步文件操作
+  - AsyncEnv trait 抽象
+  - TokioEnv 实现（跨平台）
+  - IoUringEnv 实现（Linux，使用 Tokio 后备）
 
-- **I/O Rate Limiter**: Priority-based I/O control
-  - Token bucket algorithm
-  - High/Medium/Low priority levels
-  - Separate limits for query and background tasks
+- **I/O 限流器**: 基于优先级的 I/O 控制
+  - 令牌桶算法
+  - 高/中/低三个优先级
+  - 查询和后台任务分别限流
 
-- **RocksDB Plugins**:
-  - CompactionFilter for zero-cost deletion
-  - SliceTransform for collection-based filtering
-  - MergeOperator for atomic metadata updates
+- **RocksDB 插件**:
+  - CompactionFilter 实现零成本删除
+  - SliceTransform 实现基于集合的过滤
+  - MergeOperator 实现原子元数据更新
 
-- **Collection Support**: Multi-tenancy data model
-  - CollectionId for data isolation
-  - VectorKey with collection prefix
-  - VectorMetadata with timestamps
-  - VectorValue with optional original vector
+- **集合支持**: 多租户数据模型
+  - CollectionId 实现数据隔离
+  - VectorKey 带集合前缀
+  - VectorMetadata 带时间戳
+  - VectorValue 可选原始向量
 
-#### Performance Optimizations
-- Parallel distance computation in IVF search
-- Optimized HNSW graph construction
-- Batch vector operations
-- Memory-efficient serialization
+#### 性能优化
+- IVF 搜索中的并行距离计算
+- 优化的 HNSW 图构建
+- 批量向量操作
+- 内存高效的序列化
 
-#### Testing & Benchmarking
-- SIFT1M benchmark suite
-- Quick benchmark tool
-- Synthetic data generator
-- 57 unit tests (all passing)
+#### 测试与基准
+- SIFT1M 基准测试套件
+- 快速基准测试工具
+- 合成数据生成器
+- 57 个单元测试（全部通过）
 
-#### Documentation
-- Comprehensive README with examples
-- Architecture documentation
-- Benchmark report
-- Implementation report
-- API documentation
+#### 文档
+- 包含示例的完整 README
+- 架构文档
+- 基准测试报告
+- 实现报告
+- API 文档
 
-### Changed
-- Improved IVF index build performance with parallel K-Means
-- Enhanced HNSW search with heuristic neighbor selection
-- Optimized memory allocation in hot paths
-- Updated RocksDB to v0.24.0
+### 变更
+- 使用并行 K-Means 改进 IVF 索引构建性能
+- 使用启发式邻居选择增强 HNSW 搜索
+- 优化热路径中的内存分配
+- 更新 RocksDB 到 v0.24.0
 
-### Performance Results
+### 性能结果
 
-| Operation | Throughput | Notes |
-|-----------|------------|-------|
-| Data Loading | 465K vectors/sec | fvecs format |
-| IVF Index Build | 398 vectors/sec | Parallel K-Means |
-| HNSW Index Build | 25 vectors/sec | Graph construction |
-| IVF Search | 2,555 QPS | Recall@10: 48.51% |
-| HNSW Search | 232 QPS | High recall |
-| VectorStorage Write | 89K vectors/sec | RocksDB |
-
----
-
-## [0.3.0] - 2024-01-XX
-
-### Added
-
-#### Storage Enhancements
-- **AdvancedVectorStorage**: Enhanced storage with collection support
-- **Column Family Management**: Improved data isolation
-- **Batch Operations**: Optimized batch insert and delete
-
-#### Index Improvements
-- **IVF Index Optimization**: Better clustering algorithm
-- **Distance Metrics**: Added Manhattan distance
-
-#### Development Tools
-- **Makefile**: Comprehensive build commands
-- **CI/CD Support**: Automated testing and checks
+| 操作 | 吞吐量 | 说明 |
+|------|--------|------|
+| 数据加载 | 465K 向量/秒 | fvecs 格式 |
+| IVF 索引构建 | 398 向量/秒 | 并行 K-Means |
+| HNSW 索引构建 | 25 向量/秒 | 图构建 |
+| IVF 搜索 | 2,555 QPS | Recall@10: 48.51% |
+| HNSW 搜索 | 232 QPS | 高召回率 |
+| VectorStorage 写入 | 89K 向量/秒 | RocksDB |
 
 ---
 
-## [0.2.0] - 2024-01-XX
+## [0.3.0] - 2026-03-15
 
-### Added
+### 新增
 
-#### Core Features
-- **Vector Storage**: Persistent vector storage based on RocksDB
-- **IVF Index**: Inverted File Index for fast approximate nearest neighbor search
-- **Distance Metrics**: Support for multiple distance metrics
-  - Euclidean distance
-  - Cosine similarity
-  - Dot product
-- **Data Loaders**: Support for SIFT dataset formats
-  - fvecs format (float vectors)
-  - bvecs format (byte vectors)
-  - ivecs format (integer vectors)
+#### 存储增强
+- **AdvancedVectorStorage**: 支持集合的增强存储
+- **Column Family 管理**: 改进的数据隔离
+- **批量操作**: 优化的批量插入和删除
 
-#### Storage Layer
-- **RocksDB Integration**: High-performance embedded database
-- **Column Families**: Separate storage for different data types
-  - Data CF: Vector data storage
-  - Index CF: Index metadata
-  - Metadata CF: Database metadata
-  - Cache CF: Cache layer
-  - History CF: Version history
-  - Snapshot CF: Snapshot storage
-- **LZ4 Compression**: Fast compression for storage optimization
-- **Batch Operations**: Support for batch insert and delete
+#### 索引改进
+- **IVF 索引优化**: 更好的聚类算法
+- **距离度量**: 添加曼哈顿距离
 
-#### Performance
-- **Parallel Computing**: Use Rayon for parallel distance calculation
-- **SIMD Support**: Optional SIMD acceleration for distance computation
-- **Memory Efficient**: Efficient serialization with bincode
-
-#### Development
-- **Comprehensive Tests**: 34 unit tests with 100% coverage
-- **Benchmark Suite**: Performance benchmarks using Criterion
-- **CI/CD Ready**: Makefile with all development commands
-- **Code Quality**: Clippy linter with strict warnings
-
-#### Documentation
-- **README**: Comprehensive documentation with examples
-- **API Documentation**: Inline documentation for all public APIs
-- **Architecture Diagram**: Clear architecture visualization
-- **Usage Examples**: Multiple code examples for common use cases
+#### 开发工具
+- **Makefile**: 完整的构建命令
+- **CI/CD 支持**: 自动化测试和检查
 
 ---
 
-## [0.1.0] - 2024-01-XX
+## [0.2.0] - 2026-02-20
 
-### Added
+### 新增
 
-#### Initial Release
-- Basic vector storage and retrieval
-- IVF index for ANN search
-- Multiple distance metrics (Euclidean, Cosine, Dot Product)
-- SIFT dataset support (fvecs, bvecs, ivecs)
-- RocksDB-based persistence
-- Comprehensive testing and documentation
+#### 核心功能
+- **向量存储**: 基于 RocksDB 的持久化向量存储
+- **IVF 索引**: 用于快速近似最近邻搜索的倒排文件索引
+- **距离度量**: 支持多种距离度量
+  - 欧氏距离
+  - 余弦相似度
+  - 点积
+- **数据加载器**: 支持 SIFT 数据集格式
+  - fvecs 格式（浮点向量）
+  - bvecs 格式（字节向量）
+  - ivecs 格式（整数向量）
+
+#### 存储层
+- **RocksDB 集成**: 高性能嵌入式数据库
+- **Column Families**: 不同数据类型的独立存储
+  - Data CF: 向量数据存储
+  - Index CF: 索引元数据
+  - Metadata CF: 数据库元数据
+  - Cache CF: 缓存层
+  - History CF: 版本历史
+  - Snapshot CF: 快照存储
+- **LZ4 压缩**: 快速压缩优化存储
+- **批量操作**: 支持批量插入和删除
+
+#### 性能
+- **并行计算**: 使用 Rayon 进行并行距离计算
+- **SIMD 支持**: 可选的 SIMD 加速距离计算
+- **内存高效**: 使用 bincode 进行高效序列化
+
+#### 开发
+- **完整测试**: 34 个单元测试，100% 覆盖率
+- **基准测试套件**: 使用 Criterion 进行性能基准测试
+- **CI/CD 就绪**: 包含所有开发命令的 Makefile
+- **代码质量**: Clippy 严格警告检查
+
+#### 文档
+- **README**: 包含示例的完整文档
+- **API 文档**: 所有公共 API 的内联文档
+- **架构图**: 清晰的架构可视化
+- **使用示例**: 常见用例的多个代码示例
 
 ---
 
-## [Unreleased]
+## [0.1.0] - 2026-01-10
 
-### Planned Features
-- Native io_uring implementation (Linux)
-- SPDK user-space driver
-- GPU acceleration (CUDA)
-- Distributed deployment
-- REST API server
+### 新增
+
+#### 初始发布
+- 基本向量存储和检索
+- 用于近似最近邻搜索的 IVF 索引
+- 多种距离度量（欧氏、余弦、点积）
+- SIFT 数据集支持（fvecs, bvecs, ivecs）
+- 基于 RocksDB 的持久化
+- 完整的测试和文档
+
+---
+
+## [未发布]
+
+### 计划功能
+- 原生 io_uring 实现（Linux）
+- SPDK 用户态驱动
+- GPU 加速（CUDA）
+- 分布式部署
+- REST API 服务器
 - Python SDK
-- Real-time index updates
-- Range query support
-- Filter support in search
+- 实时索引更新
+- 范围查询支持
+- 搜索中的过滤支持
 
 ---
 
-## Version History
+## 版本历史
 
-| Version | Date | Description |
-|---------|------|-------------|
-| 0.4.0 | 2024-04-06 | HNSW, Parallel K-Means, Cache, DiskANN, Async I/O |
-| 0.3.0 | 2024-01-XX | Advanced storage, collection support |
-| 0.2.0 | 2024-01-XX | IVF optimization, distance metrics |
-| 0.1.0 | 2024-01-XX | Initial release |
+| 版本 | 日期 | 描述 |
+|------|------|------|
+| 0.4.0 | 2026-04-07 | HNSW、并行 K-Means、缓存、DiskANN、异步 I/O |
+| 0.3.0 | 2026-03-15 | 高级存储、集合支持 |
+| 0.2.0 | 2026-02-20 | IVF 优化、距离度量 |
+| 0.1.0 | 2026-01-10 | 初始发布 |
 
 ---
 
-## Roadmap
+## 路线图
 
-### Version 0.5.0 (Planned)
-- [ ] Native io_uring system calls
-- [ ] GPU acceleration (CUDA)
-- [ ] REST API server
+### 版本 0.5.0（计划中）
+- [ ] 原生 io_uring 系统调用
+- [ ] GPU 加速（CUDA）
+- [ ] REST API 服务器
 - [ ] Python SDK
 
-### Version 0.6.0 (Planned)
-- [ ] Distributed deployment
-- [ ] Replication and sharding
-- [ ] Real-time index updates
-- [ ] Monitoring and metrics
+### 版本 0.6.0（计划中）
+- [ ] 分布式部署
+- [ ] 复制和分片
+- [ ] 实时索引更新
+- [ ] 监控和指标
 
-### Version 1.0.0 (Planned)
-- [ ] Production-ready release
-- [ ] Enterprise features
-- [ ] Cloud-native support
-- [ ] Global deployment
+### 版本 1.0.0（计划中）
+- [ ] 生产就绪发布
+- [ ] 企业级特性
+- [ ] 云原生支持
+- [ ] 全球部署
 
 ---
 
-## Contributing
+## 贡献
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how to contribute to this project.
+请参阅 [CONTRIBUTING.md](CONTRIBUTING.md) 了解如何为本项目做出贡献。
 
-## License
+## 许可证
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。
