@@ -183,9 +183,11 @@ fn main() {
     
     let hnsw_start = Instant::now();
     println!("  构建索引 ({} 向量)...", hnsw_test_size);
-    let mut hnsw_config = HnswConfig::default();
-    hnsw_config.max_elements = hnsw_test_size;
-    hnsw_config.ef_construction = 100;
+    let hnsw_config = HnswConfig {
+        max_elements: hnsw_test_size,
+        ef_construction: 100,
+        ..Default::default()
+    };
     let mut hnsw_index = HnswIndex::new(dim, DistanceMetric::Euclidean, hnsw_config);
     hnsw_index.build(&hnsw_vectors).expect("Failed to build HNSW");
     let hnsw_build = hnsw_start.elapsed();
@@ -218,7 +220,7 @@ fn main() {
     });
 
     println!("  测试缓存写入...");
-    for (i, vec) in test_vectors.iter().take(5_000).enumerate() {
+    for vec in test_vectors.iter().take(5_000) {
         cache.put(vec.id, vec.data.clone());
     }
 

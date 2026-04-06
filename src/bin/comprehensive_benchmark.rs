@@ -101,10 +101,12 @@ fn main() {
         
         println!("\n[HNSW] Testing with {} vectors...", size);
         let hnsw_start = Instant::now();
-        let mut hnsw_config = HnswConfig::default();
-        hnsw_config.max_elements = size;
-        hnsw_config.ef_construction = 100;
-        hnsw_config.m_max = 16;
+        let hnsw_config = HnswConfig {
+            max_elements: size,
+            ef_construction: 100,
+            m_max: 16,
+            ..Default::default()
+        };
         let mut hnsw_index = HnswIndex::new(dim, DistanceMetric::Euclidean, hnsw_config);
         hnsw_index.build(&test_vectors).expect("Failed to build HNSW");
         let hnsw_time = hnsw_start.elapsed();

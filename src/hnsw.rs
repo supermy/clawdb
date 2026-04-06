@@ -57,9 +57,7 @@ impl HnswConfig {
 
 #[derive(Debug, Clone)]
 struct Node {
-    id: u64,
     vector: Vec<f32>,
-    level: usize,
     neighbors: Vec<Vec<u64>>,
 }
 
@@ -147,9 +145,7 @@ impl HnswIndex {
         }
 
         let node = Node {
-            id: vector.id,
             vector: vector.data.clone(),
-            level,
             neighbors: vec![Vec::new(); level + 1],
         };
 
@@ -323,18 +319,6 @@ impl HnswIndex {
             results.into_iter().map(|(d, id)| (id, d.0)).collect();
         result_vec.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
         Ok(result_vec)
-    }
-
-    fn select_neighbors(&self, candidates: &[(u64, f64)], m: usize) -> Vec<(u64, f64)> {
-        let mut selected = Vec::with_capacity(m);
-        let mut candidates_vec = candidates.to_vec();
-        candidates_vec.sort_by(|a, b| a.1.partial_cmp(&b.1).unwrap());
-
-        for (id, dist) in candidates_vec.into_iter().take(m) {
-            selected.push((id, dist));
-        }
-
-        selected
     }
 
     fn select_neighbors_heuristic(

@@ -132,10 +132,12 @@ fn main() {
     let hnsw_subset_size = vectors.len().min(10_000);
     let hnsw_vectors: Vec<Vector> = vectors.iter().take(hnsw_subset_size).cloned().collect();
     let hnsw_build_start = Instant::now();
-    let mut hnsw_config = HnswConfig::default();
-    hnsw_config.max_elements = hnsw_subset_size;
-    hnsw_config.ef_construction = 100;
-    hnsw_config.m_max = 16;
+    let hnsw_config = HnswConfig {
+        max_elements: hnsw_subset_size,
+        ef_construction: 100,
+        m_max: 16,
+        ..Default::default()
+    };
     let mut hnsw_index = HnswIndex::new(dim, DistanceMetric::Euclidean, hnsw_config);
     hnsw_index.build(&hnsw_vectors).expect("Failed to build HNSW index");
     let hnsw_build_duration = hnsw_build_start.elapsed();

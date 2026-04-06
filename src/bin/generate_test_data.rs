@@ -1,4 +1,3 @@
-use clawdb::loader::SiftDataLoader;
 use rand::Rng;
 use std::fs::File;
 use std::io::Write;
@@ -29,8 +28,8 @@ fn write_ivecs(path: &Path, vectors: &[Vec<i32>]) -> std::io::Result<()> {
 }
 
 fn main() {
-    let args: std::env::Args = std::env::args();
-    let num_base = args.skip(1).next()
+    let mut args = std::env::args();
+    let num_base = args.nth(1)
         .and_then(|s| s.parse().ok())
         .unwrap_or(100_000);
     let num_query = 1000;
